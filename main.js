@@ -12,12 +12,10 @@ const animalsIcons = ['🐵', '🐒', '🦍', '🦧', '🐶', '🐕', '🐕‍�
     '🐑', '🐐', '🦇', '🐻', '🐨', '🐘', '🦏', '🦛', '🐭', '🐿️', '🦥', '🦨', '🦘',
     '🦡', '🦃', '🦜', '🦉', '🦆', '🦅', '🐧', '🐬', '🐸', '🐍', '🐝', '🐛', '🐌',
     '🐞', '🦗', '🦟'];
-
 const foodIcons = ['🥥', '🥑', '🍆', '🥔', '🥕', '🌽', '🌶️', '🥒', '🥬', '🥦', '🧄', '🥜',
     '🌭', '🍕', '🍟', '🍔', '🥓', '🥩', '🍗', '🍖', '🧀', '🥞', '🥖', '🥐', '🍞', '🥪',
     '🌮', '🌯', '🥚', '🥗', '🍡', '🍤', '🍣', '🍙', '🍘', '🍦', '🍧', '🍩', '🍪', '🎂',
     '🍰', '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '☕', '🍹', '🍺', '🥤', '🧃'];
-
 const sportsIcons = ['🏆', '🏅', '🥇', '🥈', '⚽', '⚾', '🥎', '🏀', '🏐', '🏈', '🏉', '🎾',
     '🥏', '🎳', '🏑', '🏒', '🥍', '🏓', '🏸', '🥊', '🥅', '⛳', '⛸️', '🎣', '🥌', '🎯', '🪀',
     '🪁', '🎱', '🎮', '🕹️', '🎲', '🀄', '🎨', '♟️', '🧩'];
@@ -28,6 +26,7 @@ app.get('/', (req, res) => {
 
 app.get('/cards/:difficulty/:theme', (req, res) => {
     let data = { cards: [] };
+
     if (req.params != null) {
         if (req.params.difficulty !== null && req.params.theme !== null) {
             let theme = req.params.theme;
@@ -41,12 +40,12 @@ app.get('/cards/:difficulty/:theme', (req, res) => {
             cards.forEach(card => {
                 data.cards.push(card);
             });
-
             shuffle(data.cards);
         }
     }
     res.send(JSON.stringify(data));
 });
+
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}/cards/8/food`);
 });
@@ -68,7 +67,6 @@ function getCards(difficulty, theme) {
         default:
             break;
     };
-
     for (let i = 1; i <= difficulty; i++) {
         let iconIndex = getIconIndex(-1, cards, iconList.length);
         let card = { id: iconIndex, icon: iconList[iconIndex] };
@@ -97,6 +95,7 @@ function getIconIndex(iconIndex, cards, length) {
             return getIconIndex(-1, cards, length);
         };
     };
+
     if (iconIndex === newIconIndex) {
         return getIconIndex(iconIndex, cards, length);
     };
