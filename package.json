@@ -1,0 +1,17 @@
+{
+  "name": "memorygamebackend",
+  "version": "1.0.0",
+  "description": "memory game backend",
+  "main": "main.js",
+  "scripts": {
+    "start": "node --watch main.js"
+  },
+  "author": "hector",
+  "license": "MIT",
+  "devDependencies": {
+    "express": "^4.18.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
+  }
+}
