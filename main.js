@@ -1,7 +1,6 @@
 const THEMES_ANIMALS = 'animals';
 const THEMES_FOOD = 'food';
 const THEMES_SPORTS = 'sports';
-
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -23,14 +22,11 @@ const sportsIcons = ['🏆', '🏅', '🥇', '🥈', '⚽', '⚾', '🥎', '🏀
     '🥏', '🎳', '🏑', '🏒', '🥍', '🏓', '🏸', '🥊', '🥅', '⛳', '⛸️', '🎣', '🥌', '🎯', '🪀',
     '🪁', '🎱', '🎮', '🕹️', '🎲', '🀄', '🎨', '♟️', '🧩'];
 
-const flagsIcons = [];
-
 app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
 app.get('/cards/:difficulty/:theme', (req, res) => {
-
     let data = { cards: [] };
 
     if (req.params != null) {
@@ -46,13 +42,12 @@ app.get('/cards/:difficulty/:theme', (req, res) => {
             cards.forEach(card => {
                 data.cards.push(card);
             });
-
+            
             shuffle(data.cards);
-        }
-    }
+        };
+    };
     res.send(JSON.stringify(data));
 });
-
 
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}/cards/8/food`);
@@ -78,7 +73,7 @@ function getCards(difficulty, theme) {
 
     for (let i = 1; i <= difficulty; i++) {
         let iconIndex = getIconIndex(-1, cards, iconList.length);
-        let card = { id: i, icon: iconList[iconIndex] };
+        let card = { id: iconIndex, icon: iconList[iconIndex] };
         cards.push(card);
     };
     return cards;
@@ -96,5 +91,17 @@ function getRandom(min, max) {
 };
 
 function getIconIndex(iconIndex, cards, length) {
-    return getRandom(0, (length - 1));
-}
+    let newIconIndex = getRandom(0, (length - 1));
+
+    for (let i = 0; i < cards.length; i++) {
+        const card = cards[i];
+        if (card.id === newIconIndex) {
+            return getIconIndex(-1, cards, length);
+        };
+    };
+    
+    if (iconIndex === newIconIndex) {
+        return getIconIndex(iconIndex, cards, length);
+    };
+    return newIconIndex;
+};
