@@ -1,11 +1,15 @@
 const THEMES_ANIMALS = 'animals';
 const THEMES_FOOD = 'food';
 const THEMES_SPORTS = 'sports';
+
 const express = require('express');
+const axios = require('axios');
 const cors = require('cors');
 const app = express();
 const port = 3000;
+const databaseURL = 'https://hectorcamachomemorycard-default-rtdb.firebaseio.com/';
 app.use(cors());
+
 
 const animalsIcons = ['🐵', '🐒', '🦍', '🦧', '🐶', '🐕', '🐕‍🦺', '🐩', '🐺', '🦊', '🦝',
     '🐱', '🐈', '🦁', '🐅', '🐏', '🐗', '🐖', '🐄', '🐮', '🦌', '🐴', '🐆', '🦔',
@@ -26,6 +30,19 @@ app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
+app.get('/scores', (req, res) => {
+    const url = `${databaseURL}scores.json`;
+    axios.get(url)
+        .then(function (response) {
+            res.send(response.data);
+        }).catch(function (err) {
+
+        })
+        .finally(function () {
+
+        });
+});
+
 app.get('/cards/:difficulty/:theme', (req, res) => {
     let data = { cards: [] };
 
@@ -42,7 +59,7 @@ app.get('/cards/:difficulty/:theme', (req, res) => {
             cards.forEach(card => {
                 data.cards.push(card);
             });
-            
+
             shuffle(data.cards);
         };
     };
@@ -99,7 +116,7 @@ function getIconIndex(iconIndex, cards, length) {
             return getIconIndex(-1, cards, length);
         };
     };
-    
+
     if (iconIndex === newIconIndex) {
         return getIconIndex(iconIndex, cards, length);
     };
