@@ -35,9 +35,8 @@ app.get('/scores', (req, res) => {
     const url = `${databaseURL}/scores.json`;
     axios.get(url)
         .then(function (response) {
-            let scores = [];
-            let userData = response.data;
-            for (const key in userData) {
+            var scores = [];
+            for (const key in response.data) {
                 const score = response.data[key];
                 scores.push(score);
             };
