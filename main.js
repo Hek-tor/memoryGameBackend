@@ -7,7 +7,7 @@ const axios = require('axios');
 const cors = require('cors');
 const app = express();
 const port = 3000;
-var databaseURL = 'https://hectorcamachomemorycard-default-rtdb.firebaseio.com';
+const databaseURL = 'https://hectorcamachomemorycard-default-rtdb.firebaseio.com';
 
 app.use(cors());
 
@@ -34,20 +34,20 @@ app.get('/', (req, res) => {
 app.get('/scores', (req, res) => {
     const url = `${databaseURL}/scores.json`;
     axios.get(url)
-        .then(function (res) {
+        .then(function (response) {
             let scores = [];
-            let userData = res.data;
+            let userData = response.data;
             for (const key in userData) {
-                const score = userData[key];
+                const score = response.data[key];
                 scores.push(score);
             };
             const result = scores.sort((firstItem, secondItem) => firstItem.score - secondItem.score);
 
             res.send(JSON.stringify(result.slice(0, 9)));
         }).catch(function (err) {
-            console.warn(err);
+            console.log(err);
             res.send(err);
-        })
+        });
 });
 
 app.get('/cards/:difficulty/:theme', (req, res) => {
@@ -74,7 +74,7 @@ app.get('/cards/:difficulty/:theme', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}/cards/8/food`);
+    console.log(`Servidor corriendo en http://localhost:${port}`);
 });
 
 function getCards(difficulty, theme) {
