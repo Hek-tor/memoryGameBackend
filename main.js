@@ -7,7 +7,8 @@ const axios = require('axios');
 const cors = require('cors');
 const app = express();
 const port = 3000;
-const databaseURL = 'https://hectorcamachomemorycard-default-rtdb.firebaseio.com/';
+var databaseURL = 'https://hectorcamachomemorycard-default-rtdb.firebaseio.com';
+
 app.use(cors());
 
 
@@ -31,11 +32,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/scores', (req, res) => {
-    const url = `${databaseURL}scores.json`;
+    const url = `${databaseURL}/scores.json`;
     axios.get(url)
-        .then(function (response) {
+        .then(function (res) {
             let scores = [];
-            let userData = response.data;
+            let userData = res.data;
             for (const key in userData) {
                 const score = userData[key];
                 scores.push(score);
@@ -43,7 +44,6 @@ app.get('/scores', (req, res) => {
             const result = scores.sort((firstItem, secondItem) => firstItem.score - secondItem.score);
 
             res.send(JSON.stringify(result.slice(0, 9)));
-
         }).catch(function (err) {
             console.warn(err);
             res.send(err);
