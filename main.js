@@ -1,11 +1,16 @@
 const THEMES_ANIMALS = 'animals';
 const THEMES_FOOD = 'food';
 const THEMES_SPORTS = 'sports';
+
 const express = require('express');
+const axios = require('axios');
 const cors = require('cors');
 const app = express();
 const port = 3000;
+const databaseURL = 'https://hectorcamachomemorycard-default-rtdb.firebaseio.com';
+
 app.use(cors());
+
 
 const animalsIcons = ['🐵', '🐒', '🦍', '🦧', '🐶', '🐕', '🐕‍🦺', '🐩', '🐺', '🦊', '🦝',
     '🐱', '🐈', '🦁', '🐅', '🐏', '🐗', '🐖', '🐄', '🐮', '🦌', '🐴', '🐆', '🦔',
@@ -26,6 +31,24 @@ app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
+app.get('/scores', (req, res) => {
+    const url = `${databaseURL}/scores.json`;
+    axios.get(url)
+        .then(function (response) {
+            var scores = [];
+            for (const key in response.data) {
+                const score = response.data[key];
+                scores.push(score);
+            };
+            const result = scores.sort((firstItem, secondItem) => firstItem.score - secondItem.score);
+
+            res.send(JSON.stringify(result.slice(0, 9)));
+        }).catch(function (err) {
+            console.log(err);
+            res.send(err);
+        });
+});
+
 app.get('/cards/:difficulty/:theme', (req, res) => {
     let data = { cards: [] };
 
@@ -42,7 +65,7 @@ app.get('/cards/:difficulty/:theme', (req, res) => {
             cards.forEach(card => {
                 data.cards.push(card);
             });
-            
+
             shuffle(data.cards);
         };
     };
@@ -50,7 +73,7 @@ app.get('/cards/:difficulty/:theme', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}/cards/8/food`);
+    console.log(`Servidor corriendo en http://localhost:${port}`);
 });
 
 function getCards(difficulty, theme) {
@@ -99,7 +122,7 @@ function getIconIndex(iconIndex, cards, length) {
             return getIconIndex(-1, cards, length);
         };
     };
-    
+
     if (iconIndex === newIconIndex) {
         return getIconIndex(iconIndex, cards, length);
     };
