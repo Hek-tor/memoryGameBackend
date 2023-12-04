@@ -34,13 +34,20 @@ app.get('/scores', (req, res) => {
     const url = `${databaseURL}scores.json`;
     axios.get(url)
         .then(function (response) {
-            res.send(response.data);
+            let scores = [];
+            let userData = response.data;
+            for (const key in userData) {
+                const score = userData[key];
+                scores.push(score);
+            };
+            const result = scores.sort((firstItem, secondItem) => firstItem.score - secondItem.score);
+
+            res.send(JSON.stringify(result.slice(0, 9)));
+
         }).catch(function (err) {
-
+            console.warn(err);
+            res.send(err);
         })
-        .finally(function () {
-
-        });
 });
 
 app.get('/cards/:difficulty/:theme', (req, res) => {
