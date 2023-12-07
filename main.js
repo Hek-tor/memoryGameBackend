@@ -75,7 +75,7 @@ app.get('/cards/:difficulty/:theme', (req, res) => {
     res.send(JSON.stringify(data));
 });
 
-app.post('/score', (req, res) => {
+app.post('/score', async (req, res) => {
     const url = `${databaseURL}/scores.json`;
     let score = req.body;
     axios.post(url, score)
