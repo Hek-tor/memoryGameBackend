@@ -4,13 +4,16 @@ const THEMES_SPORTS = 'sports';
 
 const express = require('express');
 const axios = require('axios');
+const bodyParser = require('body-parser')
 const cors = require('cors');
-const app = express();
 const port = 3000;
 const databaseURL = 'https://hectorcamachomemorycard-default-rtdb.firebaseio.com';
 
+const app = express();
 app.use(cors());
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
 
 const animalsIcons = ['🐵', '🐒', '🦍', '🦧', '🐶', '🐕', '🐕‍🦺', '🐩', '🐺', '🦊', '🦝',
     '🐱', '🐈', '🦁', '🐅', '🐏', '🐗', '🐖', '🐄', '🐮', '🦌', '🐴', '🐆', '🦔',
@@ -70,6 +73,20 @@ app.get('/cards/:difficulty/:theme', (req, res) => {
         };
     };
     res.send(JSON.stringify(data));
+});
+
+app.post('/score', async (req, res) => {
+    const url = `${databaseURL}/scores.json`;
+    let score = req.body;
+    axios.post(url, score)
+        .then(function (response) {
+            console.log(response);
+            res.send('OK');
+        })
+        .catch(function (error) {
+            console.log(error);
+            res.send('Add score error');
+        });
 });
 
 app.listen(port, () => {
