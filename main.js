@@ -79,9 +79,8 @@ app.post('/score', async (req, res) => {
     const url = `${databaseURL}/scores.json`;
     let score = req.body;
     axios.post(url, score)
-        .then(function (response) {
-            console.log(response);
-            res.send('OK');
+        .then(function (res) {
+            res.send({ value: 'OK' });
         })
         .catch(function (error) {
             console.log(error);
