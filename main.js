@@ -43,7 +43,7 @@ app.get('/scores', (req, res) => {
                 const score = response.data[key];
                 scores.push(score);
             };
-            const result = scores.sort((firstItem, secondItem) => firstItem.score - secondItem.score);
+            const result = scores.sort((firstItem, secondItem) => secondItem.score - firstItem.score);
 
             res.send(JSON.stringify(result.slice(0, 9)));
         }).catch(function (err) {
